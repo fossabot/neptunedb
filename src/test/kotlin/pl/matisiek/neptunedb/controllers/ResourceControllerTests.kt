@@ -17,6 +17,7 @@ import org.springframework.test.context.junit4.SpringRunner
 import org.springframework.http.HttpEntity
 import org.apache.catalina.manager.StatusTransformer.setContentType
 import org.springframework.data.mongodb.core.MongoTemplate
+import org.springframework.data.mongodb.core.query.Criteria
 import org.springframework.data.mongodb.core.query.Query
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpMethod
@@ -66,6 +67,8 @@ class ResourceControllerTests {
         assertThat(restTemplate.postForObject("http://localhost:$port/resources/dogs", entity, String::class.java))
         assertThat(restTemplate.getForObject("http://localhost:$port/resources/dogs", String::class.java)).contains("Boxy")
         assertThat(restTemplate.getForObject("http://localhost:$port/resources/dogs", String::class.java)).contains("John")
+        assertThat(mongoTemplate.count(Query().addCriteria(Criteria.where("name").`is`("Boxy")), "dogs")).isGreaterThan(0)
+        assertThat(mongoTemplate.count(Query().addCriteria(Criteria.where("owner").`is`("John")), "dogs")).isGreaterThan(0)
     }
 
     @Test
@@ -80,6 +83,8 @@ class ResourceControllerTests {
         assertThat(restTemplate.exchange("http://localhost:$port/resources/dogs/${dogs[0]._id}", HttpMethod.PUT, entity, String::class.java).body).contains("Lil")
         assertThat(restTemplate.getForObject("http://localhost:$port/resources/dogs", String::class.java)).contains("Lil")
         assertThat(restTemplate.getForObject("http://localhost:$port/resources/dogs", String::class.java)).contains("John")
+        assertThat(mongoTemplate.count(Query().addCriteria(Criteria.where("name").`is`("Lil")), "dogs")).isGreaterThan(0)
+        assertThat(mongoTemplate.count(Query().addCriteria(Criteria.where("owner").`is`("John")), "dogs")).isGreaterThan(0)
     }
 
     @Test
