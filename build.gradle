@@ -18,6 +18,7 @@ apply plugin: 'kotlin-spring'
 apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
+apply plugin: 'build-dashboard'
 
 group = 'pl.matisiek'
 version = '0.0.1-SNAPSHOT'
