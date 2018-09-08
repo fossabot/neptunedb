@@ -82,4 +82,16 @@ class ResourceControllerTests {
         assertThat(restTemplate.getForObject("http://localhost:$port/resources/dogs", String::class.java)).contains("John")
     }
 
+    @Test
+    fun shouldRemoveDocument() {
+        shouldInsertDocument()
+        val mapper = ObjectMapper()
+        val dogs = mapper.readValue(restTemplate.getForObject("http://localhost:$port/resources/dogs", String::class.java), Array<Dog>::class.java)
+        val headers = HttpHeaders()
+        headers.contentType = MediaType.APPLICATION_JSON
+        val entity = HttpEntity(ObjectMapper().writeValueAsString(dogs[0]), headers)
+        assertThat(restTemplate.exchange("http://localhost:$port/resources/dogs/${dogs[0]._id}", HttpMethod.DELETE, entity, String::class.java).body).contains("{}")
+        assertThat(restTemplate.getForObject("http://localhost:$port/resources/dogs", String::class.java)).doesNotContain("Boxy")
+    }
+
 }
