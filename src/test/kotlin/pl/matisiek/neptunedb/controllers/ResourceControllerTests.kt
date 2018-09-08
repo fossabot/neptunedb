@@ -22,11 +22,12 @@ import org.springframework.data.mongodb.core.query.Query
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpMethod
 import org.springframework.http.MediaType
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner
 
 
 data class Dog constructor(@JsonProperty("_id") val _id: String?, @JsonProperty("name") var name: String, @JsonProperty("owner") val owner: String)
 
-@RunWith(SpringRunner::class)
+@RunWith(SpringJUnit4ClassRunner::class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class ResourceControllerTests {
 
